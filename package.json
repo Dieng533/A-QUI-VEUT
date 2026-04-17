@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Application mobile de santé A QUI VEUT ?",
   "scripts": {
-    "build": "flutter build web",
+    "build": "chmod +x build.sh && ./build.sh",
     "dev": "flutter run -d chrome"
   },
   "keywords": [
