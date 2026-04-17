@@ -1,8 +1,9 @@
 {
   "version": 2,
+  "name": "a-qui-veut",
   "builds": [
     {
-      "src": "build/web/**",
+      "src": "build/web",
       "use": "@vercel/static"
     }
   ],
