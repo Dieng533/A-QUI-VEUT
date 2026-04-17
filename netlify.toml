@@ -1,9 +1,31 @@
 [build]
   publish = "build/web"
-  command = "flutter build web"
+  command = "flutter build web --no-sound-null-safety"
   
-[build.environment]
-  FLUTTER_VERSION = "3.19.0"
+[[redirects]]
+  from = "/assets/*"
+  to = "/assets/:splat"
+  status = 200
+  
+[[redirects]]
+  from = "/flutter.js"
+  to = "/flutter.js"
+  status = 200
+  
+[[redirects]]
+  from = "/flutter_bootstrap.js"
+  to = "/flutter_bootstrap.js"
+  status = 200
+  
+[[redirects]]
+  from = "/flutter_service_worker.js"
+  to = "/flutter_service_worker.js"
+  status = 200
+  
+[[redirects]]
+  from = "/main.dart.js"
+  to = "/main.dart.js"
+  status = 200
   
 [[redirects]]
   from = "/*"
