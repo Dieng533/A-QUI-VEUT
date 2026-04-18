@@ -102,6 +102,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 padding: const EdgeInsets.all(12),
                               ),
                             ),
+                            const SizedBox(height: 8),
+                            // Logo
+                            Container(
+                              width: 60,
+                              height: 60,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: AppTheme.primaryBlue.withOpacity(0.2),
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 3),
+                                  ),
+                                ],
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(16),
+                                child: Image.asset(
+                                  'assets/logoaquiveut.png',
+                                  width: 60,
+                                  height: 60,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
                             const SizedBox(height: 20),
                             Text(
                               'Créer un compte',
