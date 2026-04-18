@@ -112,7 +112,6 @@ class _SplashScreenState extends State<SplashScreen>
                       width: 120,
                       height: 120,
                       decoration: BoxDecoration(
-                        color: AppTheme.primaryBlue,
                         borderRadius: BorderRadius.circular(24),
                         boxShadow: [
                           BoxShadow(
@@ -122,10 +121,14 @@ class _SplashScreenState extends State<SplashScreen>
                           ),
                         ],
                       ),
-                      child: const Icon(
-                        Icons.favorite,
-                        size: 60,
-                        color: AppTheme.white,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(24),
+                        child: Image.asset(
+                          'assets/logoaquiveut.png',
+                          width: 120,
+                          height: 120,
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
                   );

@@ -171,10 +171,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               CircleAvatar(
                                 radius: 50,
                                 backgroundColor: AppTheme.white,
-                                child: Icon(
-                                  Icons.person,
-                                  size: 50,
-                                  color: AppTheme.primaryBlue,
+                                child: ClipOval(
+                                  child: Image.asset(
+                                    'assets/logoaquiveut.png',
+                                    width: 100,
+                                    height: 100,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
                               if (_isEditing)

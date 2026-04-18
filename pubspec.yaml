@@ -54,6 +54,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - assets/logoaquiveut.png
     - assets/
 
   # Fonts will be added when font files are downloaded
