@@ -1,0 +1,117 @@
+name: CodeMagic Android Build
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      build_type:
+        description: 'Type of build'
+        required: true
+        default: 'release'
+        type: choice
+        options:
+        - release
+        - debug
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Java 17
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+        
+    - name: Cache Flutter dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.pub-cache
+          /opt/hostedtoolcache/Flutter
+        key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-flutter-
+          
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.41.6'
+        channel: 'stable'
+        
+    - name: Get Flutter dependencies
+      run: flutter pub get
+      
+    - name: Verify Flutter environment
+      run: |
+        flutter doctor -v
+        flutter --version
+        
+    - name: Clean Flutter project
+      run: flutter clean
+      
+    - name: Get Flutter dependencies again
+      run: flutter pub get
+      
+    - name: Build APK
+      run: |
+        if [ "${{ github.event.inputs.build_type }}" = "debug" ] || [ "${{ github.event.inputs.build_type }}" = "" ]; then
+          echo "Building debug APK..."
+          flutter build apk --debug --verbose --no-shrink
+        else
+          echo "Building release APK..."
+          flutter build apk --release --verbose --shrink
+        fi
+        
+    - name: Create build directory
+      run: mkdir -p build-output
+      
+    - name: Copy APK to build-output
+      run: |
+        if [ -f "build/app/outputs/flutter-apk/app-debug.apk" ]; then
+          cp build/app/outputs/flutter-apk/app-debug.apk build-output/aquiveut-debug.apk
+        fi
+        if [ -f "build/app/outputs/flutter-apk/app-release.apk" ]; then
+          cp build/app/outputs/flutter-apk/app-release.apk build-output/aquiveut-release.apk
+        fi
+        
+    - name: Generate build info
+      run: |
+        echo "Build Information:" > build-output/build-info.txt
+        echo "==================" >> build-output/build-info.txt
+        echo "Build Date: $(date)" >> build-output/build-info.txt
+        echo "Commit: ${{ github.sha }}" >> build-output/build-info.txt
+        echo "Branch: ${{ github.ref_name }}" >> build-output/build-info.txt
+        echo "Flutter Version: $(flutter --version | head -1)" >> build-output/build-info.txt
+        echo "Application ID: com.aquiveut.app" >> build-output/build-info.txt
+        echo "" >> build-output/build-info.txt
+        echo "APK Files:" >> build-output/build-info.txt
+        ls -la build/app/outputs/flutter-apk/ >> build-output/build-info.txt
+        
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: android-apk-build
+        path: build-output/
+        retention-days: 30
+        
+    - name: Display APK information
+      run: |
+        echo "=== Build Summary ==="
+        echo "APK files created:"
+        ls -la build/app/outputs/flutter-apk/
+        echo ""
+        echo "File sizes:"
+        if [ -f "build/app/outputs/flutter-apk/app-debug.apk" ]; then
+          echo "Debug APK: $(du -h build/app/outputs/flutter-apk/app-debug.apk | cut -f1)"
+        fi
+        if [ -f "build/app/outputs/flutter-apk/app-release.apk" ]; then
+          echo "Release APK: $(du -h build/app/outputs/flutter-apk/app-release.apk | cut -f1)"
+        fi
