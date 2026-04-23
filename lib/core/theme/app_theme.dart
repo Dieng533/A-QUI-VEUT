@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   // Couleurs principales
   static const Color primaryBlue = Color(0xFF2D8CFF);
   static const Color secondaryGreen = Color(0xFF27AE60);
+  static const Color healthGreen = Color(0xFF27AE60);
+  static const Color alertRed = Color(0xFFFF6B6B);
   static const Color white = Color(0xFFFFFFFF);
   static const Color lightGray = Color(0xFFF5F5F5);
   static const Color mediumGray = Color(0xFFE0E0E0);
@@ -33,85 +36,84 @@ class AppTheme {
         onError: white,
       ),
       
-      // Typography
-      textTheme: const TextTheme(
-        displayLarge: TextStyle(
-          fontSize: 32,
-          fontWeight: FontWeight.bold,
-          color: black,
-          fontFamily: 'Roboto',
-        ),
-        displayMedium: TextStyle(
-          fontSize: 28,
-          fontWeight: FontWeight.bold,
-          color: black,
-          fontFamily: 'Roboto',
-        ),
-        displaySmall: TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.w600,
-          color: black,
-          fontFamily: 'Roboto',
-        ),
-        headlineLarge: TextStyle(
-          fontSize: 22,
-          fontWeight: FontWeight.w600,
-          color: black,
-          fontFamily: 'Roboto',
-        ),
-        headlineMedium: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-          color: black,
-          fontFamily: 'Roboto',
-        ),
-        headlineSmall: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.w500,
-          color: black,
-          fontFamily: 'Roboto',
-        ),
-        titleLarge: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
-          color: black,
-          fontFamily: 'Roboto',
-        ),
-        titleMedium: TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
-          color: black,
-          fontFamily: 'Roboto',
-        ),
-        bodyLarge: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.normal,
-          color: black,
-          fontFamily: 'Roboto',
-        ),
-        bodyMedium: TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.normal,
-          color: black,
-          fontFamily: 'Roboto',
-        ),
-        bodySmall: TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.normal,
-          color: darkGray,
-          fontFamily: 'Roboto',
-        ),
-        labelLarge: TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
-          color: white,
-          fontFamily: 'Roboto',
-        ),
-        labelMedium: TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.w500,
-          color: white,
-          fontFamily: 'Roboto',
+      // Typography avec Google Fonts
+      textTheme: GoogleFonts.notoSansTextTheme(
+        ThemeData.light().textTheme.copyWith(
+          displayLarge: const TextStyle(
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
+            color: black,
+          ),
+          displayMedium: const TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+            color: black,
+          ),
+          displaySmall: const TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: black,
+          ),
+          headlineLarge: const TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: black,
+          ),
+          headlineMedium: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color: black,
+          ),
+          headlineSmall: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            color: black,
+          ),
+          titleLarge: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: black,
+          ),
+          titleMedium: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            color: black,
+          ),
+          titleSmall: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+            color: black,
+          ),
+          bodyLarge: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.normal,
+            color: black,
+          ),
+          bodyMedium: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.normal,
+            color: black,
+          ),
+          bodySmall: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.normal,
+            color: black,
+          ),
+          labelLarge: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            color: white,
+          ),
+          labelMedium: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+            color: white,
+          ),
+          labelSmall: const TextStyle(
+            fontSize: 10,
+            fontWeight: FontWeight.w500,
+            color: white,
+          ),
         ),
       ),
       

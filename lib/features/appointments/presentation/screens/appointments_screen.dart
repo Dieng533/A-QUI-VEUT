@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/router/app_router.dart';
 import '../../../../shared/widgets/doctor_card.dart';
 import '../../../../shared/widgets/custom_button.dart';
 import '../../../../shared/widgets/search_bar.dart';
+import '../../../../shared/data/mock_data.dart';
 
 class AppointmentsScreen extends StatefulWidget {
   const AppointmentsScreen({super.key});
@@ -27,58 +30,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
 
   int _selectedCategory = 0;
 
-  final List<Doctor> _doctors = [
-    Doctor(
-      id: '1',
-      name: 'Dr. Marie Sarr',
-      specialty: 'Médecin généraliste',
-      rating: 4.8,
-      experience: '10 ans',
-      availability: 'Disponible aujourd\'hui',
-      price: '10 000 FCFA',
-      imageUrl: null,
-    ),
-    Doctor(
-      id: '2',
-      name: 'Dr. Alassane Ba',
-      specialty: 'Pédiatre',
-      rating: 4.9,
-      experience: '8 ans',
-      availability: 'Disponible demain',
-      price: '15 000 FCFA',
-      imageUrl: null,
-    ),
-    Doctor(
-      id: '3',
-      name: 'Mme. Fatou Ndiaye',
-      specialty: 'Sage-femme',
-      rating: 4.7,
-      experience: '12 ans',
-      availability: 'Disponible maintenant',
-      price: '8 000 FCFA',
-      imageUrl: null,
-    ),
-    Doctor(
-      id: '4',
-      name: 'Dr. Omar Diop',
-      specialty: 'Cardiologue',
-      rating: 4.9,
-      experience: '15 ans',
-      availability: 'Disponible jeudi',
-      price: '25 000 FCFA',
-      imageUrl: null,
-    ),
-    Doctor(
-      id: '5',
-      name: 'M. Abdoulaye Fall',
-      specialty: 'Infirmier',
-      rating: 4.6,
-      experience: '6 ans',
-      availability: 'Disponible aujourd\'hui',
-      price: '5 000 FCFA',
-      imageUrl: null,
-    ),
-  ];
+  final List<Map<String, dynamic>> _doctors = MockData.doctors;
 
   @override
   void initState() {
@@ -93,20 +45,22 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
     super.dispose();
   }
 
-  List<Doctor> get _filteredDoctors {
+  List<Map<String, dynamic>> get _filteredDoctors {
     if (_selectedCategory == 0) return _doctors;
     
     final category = _categories[_selectedCategory].toLowerCase();
     return _doctors.where((doctor) {
       switch (category) {
         case 'médecins':
-          return doctor.specialty.toLowerCase().contains('médecin') ||
-                 doctor.specialty.toLowerCase().contains('pédiatre') ||
-                 doctor.specialty.toLowerCase().contains('cardiologue');
+          return doctor['specialty'].toString().toLowerCase().contains('médecin') ||
+                 doctor['specialty'].toString().toLowerCase().contains('pédiatre') ||
+                 doctor['specialty'].toString().toLowerCase().contains('cardiologue') ||
+                 doctor['specialty'].toString().toLowerCase().contains('gynécologue') ||
+                 doctor['specialty'].toString().toLowerCase().contains('dermatologue');
         case 'sages-femmes':
-          return doctor.specialty.toLowerCase().contains('sage-femme');
+          return doctor['specialty'].toString().toLowerCase().contains('sage-femme');
         case 'infirmiers':
-          return doctor.specialty.toLowerCase().contains('infirmier');
+          return doctor['specialty'].toString().toLowerCase().contains('infirmier');
         default:
           return true;
       }
@@ -206,7 +160,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
     );
   }
 
-  void _showBookingDialog(Doctor doctor) {
+  void _showBookingDialog(Map<String, dynamic> doctor) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -224,21 +178,21 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              doctor.name,
+              doctor['name'],
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w600,
               ),
             ),
             const SizedBox(height: 4),
             Text(
-              doctor.specialty,
+              doctor['specialty'],
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: AppTheme.darkGray,
               ),
             ),
             const SizedBox(height: 16),
             Text(
-              'Tarif: ${doctor.price}',
+              'Tarif: ${doctor['price']}',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 color: AppTheme.primaryBlue,
                 fontWeight: FontWeight.w600,
@@ -246,7 +200,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
             ),
             const SizedBox(height: 8),
             Text(
-              doctor.availability,
+              doctor['availability'] == true ? 'Disponible' : 'Indisponible',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: AppTheme.secondaryGreen,
                 fontWeight: FontWeight.w500,
@@ -286,24 +240,3 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
   }
 }
 
-class Doctor {
-  final String id;
-  final String name;
-  final String specialty;
-  final double rating;
-  final String experience;
-  final String availability;
-  final String price;
-  final String? imageUrl;
-
-  Doctor({
-    required this.id,
-    required this.name,
-    required this.specialty,
-    required this.rating,
-    required this.experience,
-    required this.availability,
-    required this.price,
-    this.imageUrl,
-  });
-}

@@ -145,85 +145,266 @@ class _HomeTab extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Header avec profil
-            Container(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  // Photo de profil
-                  Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: AppTheme.white,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppTheme.primaryBlue.withOpacity(0.2),
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
+            FadeInDown(
+              duration: const Duration(milliseconds: 800),
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    // Photo de profil
+                    Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: AppTheme.white,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppTheme.primaryBlue.withOpacity(0.2),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: ClipOval(
+                        child: Image.asset(
+                          'assets/logoaquiveut.png',
+                          width: 50,
+                          height: 50,
+                          fit: BoxFit.cover,
                         ),
-                      ],
-                    ),
-                    child: ClipOval(
-                      child: Image.asset(
-                        'assets/logoaquiveut.png',
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
                       ),
                     ),
-                  ),
-                  
-                  const SizedBox(width: 12),
-                  
-                  // Message de bienvenue
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Bonjour ${user?['name'] ?? 'Test User'} !',
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        Text(
-                          'Comment vous sentez-vous aujourd\'hui ?',
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppTheme.darkGray,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  
-                  // Icône notifications
-                  Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: AppTheme.lightGray,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Stack(
-                      children: [
-                        Center(
-                          child: Icon(
-                            Icons.notifications_outlined,
-                            color: AppTheme.darkGray,
-                            size: 20,
-                          ),
-                        ),
-                        // Badge pour notifications non lues
-                        Positioned(
-                          top: 2,
-                          right: 2,
-                          child: Container(
-                            width: 8,
-                            height: 8,
-                            decoration: BoxDecoration(
-                              color: AppTheme.softRed,
-                              shape: BoxShape.circle,
+                    
+                    const SizedBox(width: 12),
+                    
+                    // Message de bienvenue
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Bonjour ${user?['name'] ?? 'Test User'} !',
+                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: AppTheme.darkGray,
                             ),
                           ),
+                          Text(
+                            'Votre santé, plus proche de vous',
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: AppTheme.darkGray,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    
+                    // Icône notifications
+                    Container(
+                      width: 45,
+                      height: 45,
+                      decoration: BoxDecoration(
+                        color: AppTheme.primaryBlue.withOpacity(0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Stack(
+                        children: [
+                          Center(
+                            child: Icon(
+                              Icons.notifications_outlined,
+                              color: AppTheme.primaryBlue,
+                              size: 24,
+                            ),
+                          ),
+                          Positioned(
+                            top: 8,
+                            right: 8,
+                            child: Container(
+                              width: 8,
+                              height: 8,
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            
+            const SizedBox(height: 20),
+            
+            // Barre de recherche
+            FadeInLeft(
+              duration: const Duration(milliseconds: 900),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  color: AppTheme.lightGray,
+                  borderRadius: BorderRadius.circular(24),
+                  border: Border.all(color: AppTheme.lightGray),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.search,
+                      color: AppTheme.darkGray.withOpacity(0.6),
+                      size: 20,
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Rechercher médecin, pharmacie, besoin santé...',
+                          hintStyle: TextStyle(
+                            color: AppTheme.darkGray.withOpacity(0.6),
+                            fontSize: 14,
+                          ),
+                          border: InputBorder.none,
+                          contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                        ),
+                      ),
+                    ),
+                    Icon(
+                      Icons.mic,
+                      color: AppTheme.primaryBlue,
+                      size: 20,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            
+            const SizedBox(height: 24),
+            
+            // Quick Actions
+            FadeInUp(
+              duration: const Duration(milliseconds: 1000),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Actions Rapides',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.darkGray,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  GridView.count(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
+                    childAspectRatio: 1.0,
+                    children: [
+                      _QuickActionCard(
+                        icon: Icons.calendar_today,
+                        label: 'Rendez-vous',
+                        color: AppTheme.primaryBlue,
+                        onTap: () => context.push('/appointments'),
+                      ),
+                      _QuickActionCard(
+                        icon: Icons.chat_bubble,
+                        label: 'Chatbot',
+                        color: AppTheme.primaryBlue,
+                        onTap: () => context.push('/chatbot'),
+                      ),
+                      _QuickActionCard(
+                        icon: Icons.local_pharmacy,
+                        label: 'Pharmacies',
+                        color: AppTheme.healthGreen,
+                        onTap: () => context.push('/map'),
+                      ),
+                      _QuickActionCard(
+                        icon: Icons.health_and_safety,
+                        label: 'Conseils',
+                        color: AppTheme.healthGreen,
+                        onTap: () => context.push('/health-tips'),
+                      ),
+                      _QuickActionCard(
+                        icon: Icons.emergency,
+                        label: 'Urgence',
+                        color: AppTheme.alertRed,
+                        onTap: () => context.push('/emergency'),
+                      ),
+                      _QuickActionCard(
+                        icon: Icons.psychology,
+                        label: 'Soutien',
+                        color: AppTheme.primaryBlue,
+                        onTap: () => context.push('/psychosocial'),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            
+            const SizedBox(height: 24),
+            
+            // Services Populaires
+            FadeInLeft(
+              duration: const Duration(milliseconds: 1100),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Services Populaires',
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: AppTheme.darkGray,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {},
+                        child: Text(
+                          'Voir tout',
+                          style: TextStyle(
+                            color: AppTheme.primaryBlue,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    height: 120,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: [
+                        _ServiceCard(
+                          icon: Icons.medical_services,
+                          title: 'Consultation',
+                          subtitle: 'Médecins disponibles',
+                          color: AppTheme.primaryBlue,
+                        ),
+                        _ServiceCard(
+                          icon: Icons.vaccines,
+                          title: 'Vaccination',
+                          subtitle: 'Centres proches',
+                          color: AppTheme.healthGreen,
+                        ),
+                        _ServiceCard(
+                          icon: Icons.science,
+                          title: 'Analyses',
+                          subtitle: 'Laboratoires',
+                          color: AppTheme.primaryBlue,
+                        ),
+                        _ServiceCard(
+                          icon: Icons.pregnant_woman,
+                          title: 'Maternité',
+                          subtitle: 'Suivi grossesse',
+                          color: AppTheme.healthGreen,
                         ),
                       ],
                     ),
@@ -233,227 +414,223 @@ class _HomeTab extends StatelessWidget {
             ),
             
             const SizedBox(height: 24),
-
-            // Search Bar
-            FadeInLeft(
-              duration: const Duration(milliseconds: 800),
-              delay: const Duration(milliseconds: 200),
-              child: CustomSearchBar(
-                hintText: 'Rechercher un besoin santé...',
-                onTap: () {
-                  // TODO: Implement search functionality
-                },
-              ),
-            ),
-
-            const SizedBox(height: 32),
-
-            // Services Cards
+            
+            // Conseil du jour
             FadeInUp(
-              duration: const Duration(milliseconds: 800),
-              delay: const Duration(milliseconds: 400),
-              child: Text(
-                'Services',
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
+              duration: const Duration(milliseconds: 1200),
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      AppTheme.primaryBlue.withOpacity(0.1),
+                      AppTheme.healthGreen.withOpacity(0.1),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: AppTheme.primaryBlue.withOpacity(0.2),
+                  ),
                 ),
-              ),
-            ),
-
-            const SizedBox(height: 16),
-
-            FadeInUp(
-              duration: const Duration(milliseconds: 800),
-              delay: const Duration(milliseconds: 600),
-              child: GridView.count(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                crossAxisCount: 2,
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 16,
-                childAspectRatio: 1.2,
-                children: [
-                  ServiceCard(
-                    icon: Icons.calendar_month,
-                    title: 'Prendre rendez-vous',
-                    color: AppTheme.primaryBlue,
-                    onTap: () => context.push(AppRouter.appointments),
-                  ),
-                  ServiceCard(
-                    icon: Icons.smart_toy,
-                    title: 'Chatbot santé',
-                    color: AppTheme.secondaryGreen,
-                    onTap: () => context.push(AppRouter.chatbot),
-                  ),
-                  ServiceCard(
-                    icon: Icons.local_pharmacy,
-                    title: 'Pharmacies proches',
-                    color: Colors.orange,
-                    onTap: () => context.push(AppRouter.map),
-                  ),
-                  ServiceCard(
-                    icon: Icons.lightbulb,
-                    title: 'Conseils rapides',
-                    color: Colors.purple,
-                    onTap: () => context.push(AppRouter.chatbot),
-                  ),
-                  ServiceCard(
-                    icon: Icons.emergency,
-                    title: 'Urgences',
-                    color: AppTheme.softRed,
-                    onTap: () => context.push(AppRouter.map),
-                  ),
-                  ServiceCard(
-                    icon: Icons.folder_shared,
-                    title: 'Dossier médical',
-                    color: Colors.teal,
-                    onTap: () => context.push(AppRouter.profile),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 32),
-
-            // Services Populaires
-            FadeInLeft(
-              duration: const Duration(milliseconds: 800),
-              delay: const Duration(milliseconds: 800),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Services populaires',
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  SizedBox(
-                    height: 120,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
                       children: [
-                        _buildPopularService(
-                          context,
-                          'Consultation générale',
-                          Icons.medical_services,
-                          AppTheme.primaryBlue,
+                        Icon(
+                          Icons.lightbulb,
+                          color: AppTheme.primaryBlue,
+                          size: 24,
                         ),
-                        const SizedBox(width: 12),
-                        _buildPopularService(
-                          context,
-                          'Pédiatrie',
-                          Icons.child_care,
-                          Colors.pink,
-                        ),
-                        const SizedBox(width: 12),
-                        _buildPopularService(
-                          context,
-                          'Gynécologie',
-                          Icons.female,
-                          Colors.purple,
-                        ),
-                        const SizedBox(width: 12),
-                        _buildPopularService(
-                          context,
-                          'Dentisterie',
-                          Icons.healing,
-                          Colors.cyan,
+                        const SizedBox(width: 8),
+                        Text(
+                          'Conseil du jour',
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: AppTheme.primaryBlue,
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 32),
-
-            // Conseils du jour
-            FadeInRight(
-              duration: const Duration(milliseconds: 800),
-              delay: const Duration(milliseconds: 1000),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Conseils du jour',
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
+                    const SizedBox(height: 12),
+                    Text(
+                      'Buvez au moins 8 verres d\'eau par jour pour maintenir une bonne hydratation et favoriser l\'élimination des toxines.',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppTheme.darkGray,
+                        height: 1.5,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  HealthTipCard(
-                    title: 'Hydratez-vous régulièrement',
-                    description: 'Buvez au moins 8 verres d\'eau par jour pour maintenir votre corps en bonne santé.',
-                    icon: Icons.water_drop,
-                    color: AppTheme.primaryBlue,
-                  ),
-                  const SizedBox(height: 12),
-                  HealthTipCard(
-                    title: 'Faites de l\'exercice',
-                    description: '30 minutes d\'activité physique par jour peuvent réduire les risques de maladies.',
-                    icon: Icons.directions_run,
-                    color: AppTheme.secondaryGreen,
-                  ),
-                ],
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppTheme.primaryBlue,
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            child: Text('En savoir plus'),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.bookmark_border,
+                            color: AppTheme.primaryBlue,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-
+            
             const SizedBox(height: 20),
           ],
         ),
       ),
     );
   }
+}
 
-  Widget _buildPopularService(
-    BuildContext context,
-    String title,
-    IconData icon,
-    Color color,
-  ) {
-    return Container(
-      width: 120,
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: color.withOpacity(0.3)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
+class _QuickActionCard extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final Color color;
+  final VoidCallback onTap;
+
+  const _QuickActionCard({
+    required this.icon,
+    required this.label,
+    required this.color,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: color.withOpacity(0.2),
+          ),
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              padding: const EdgeInsets.all(10),
+              width: 50,
+              height: 50,
               decoration: BoxDecoration(
-                color: color.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(10),
+                color: color,
+                shape: BoxShape.circle,
               ),
               child: Icon(
                 icon,
+                color: Colors.white,
                 size: 24,
-                color: color,
               ),
             ),
             const SizedBox(height: 8),
-            Flexible(
-              child: Text(
-                title,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 11,
-                ),
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: color,
               ),
+              textAlign: TextAlign.center,
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _ServiceCard extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final Color color;
+
+  const _ServiceCard({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 140,
+      margin: const EdgeInsets.only(right: 12),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: color.withOpacity(0.2),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: color.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(
+              icon,
+              color: color,
+              size: 18,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: AppTheme.darkGray,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: 2),
+          Text(
+            subtitle,
+            style: TextStyle(
+              fontSize: 10,
+              color: AppTheme.darkGray.withOpacity(0.7),
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
       ),
     );
   }

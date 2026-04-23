@@ -22,21 +22,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final List<OnboardingItem> _items = [
     OnboardingItem(
       icon: Icons.search,
-      title: 'Trouvez rapidement des services de santé',
+      title: 'Trouver rapidement des services de santé',
       description: 'Localisez les hôpitaux, pharmacies et professionnels de santé près de chez vous',
-      illustration: '🏥',
+      illustration: '??',
     ),
     OnboardingItem(
       icon: Icons.calendar_today,
-      title: 'Prenez rendez-vous en quelques clics',
+      title: 'Prendre rendez-vous facilement',
       description: 'Réservez facilement vos consultations avec médecins et spécialistes',
-      illustration: '📅',
+      illustration: '??',
     ),
     OnboardingItem(
       icon: Icons.chat,
-      title: 'Recevez des conseils via assistant intelligent',
+      title: 'Recevoir assistance santé intelligente',
       description: 'Obtenez des réponses immédiates à vos questions de santé 24/7',
-      illustration: '💬',
+      illustration: '??',
     ),
   ];
 

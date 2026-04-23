@@ -42,11 +42,11 @@ class DoctorCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                   color: AppTheme.lightGray,
                 ),
-                child: doctor.imageUrl != null
+                child: doctor['imageUrl'] != null && doctor['imageUrl'].toString().isNotEmpty
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(12),
                         child: CachedNetworkImage(
-                          imageUrl: doctor.imageUrl!,
+                          imageUrl: doctor['imageUrl'].toString(),
                           fit: BoxFit.cover,
                           placeholder: (context, url) => Container(
                             color: AppTheme.lightGray,
@@ -76,14 +76,14 @@ class DoctorCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      doctor.name,
+                      doctor['name']?.toString() ?? 'Nom inconnu',
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      doctor.specialty,
+                      doctor['specialty']?.toString() ?? 'Spécialité inconnue',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppTheme.darkGray,
                       ),
@@ -101,7 +101,7 @@ class DoctorCard extends StatelessWidget {
                             ),
                             const SizedBox(width: 4),
                             Text(
-                              doctor.rating.toString(),
+                              doctor['rating']?.toString() ?? '0.0',
                               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                 fontWeight: FontWeight.w500,
                               ),
@@ -111,7 +111,7 @@ class DoctorCard extends StatelessWidget {
                         const SizedBox(width: 16),
                         // Experience
                         Text(
-                          doctor.experience,
+                          doctor['experience']?.toString() ?? 'Non spécifiée',
                           style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: AppTheme.darkGray,
                           ),
@@ -130,7 +130,7 @@ class DoctorCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
-                        doctor.availability,
+                        doctor['availability'] == true ? 'Disponible' : 'Indisponible',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: AppTheme.secondaryGreen,
                           fontWeight: FontWeight.w500,
@@ -146,7 +146,7 @@ class DoctorCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    doctor.price,
+                    doctor['price']?.toString() ?? 'Prix non spécifié',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: AppTheme.primaryBlue,
                       fontWeight: FontWeight.bold,
