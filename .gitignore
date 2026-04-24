@@ -242,9 +242,11 @@ out/
 gradlew
 gradlew.bat
 
-# Keystore files
+# Keystore files (NE JAMAIS PARTAGER)
 *.jks
 *.keystore
+android/key.properties
+android/aquiveut-key.jks
 
 # Release artifacts
 *.apk
