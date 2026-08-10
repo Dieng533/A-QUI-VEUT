@@ -34,12 +34,19 @@ class _ProfessionalDashboardScreenState extends State<ProfessionalDashboardScree
     final appointmentProvider = context.read<AppointmentProvider>();
     final professionalProvider = context.read<ProfessionalProvider>();
     
+    print('DEBUG DASHBOARD - Loading data...');
+    print('DEBUG DASHBOARD - User data: ${authProvider.user}');
+    
     // Charger les données du professionnel (utiliser l'ID du professionnel lié à l'utilisateur)
     final professionalId = authProvider.user?['professional_id'] ?? authProvider.user!['id'];
-    await professionalProvider.getProfessional(professionalId);
+    print('DEBUG DASHBOARD - Professional ID: $professionalId');
     
-    // Charger les rendez-vous
-    await appointmentProvider.getAppointments();
+    await professionalProvider.getProfessional(professionalId);
+    print('DEBUG DASHBOARD - Professional loaded: ${professionalProvider.professional}');
+    
+    // Charger les rendez-vous du professionnel
+    await appointmentProvider.getProfessionalAppointments(professionalId);
+    print('DEBUG DASHBOARD - Appointments loaded: ${appointmentProvider.appointments.length}');
   }
 
   @override
@@ -440,26 +447,16 @@ class _ProfessionalDashboardScreenState extends State<ProfessionalDashboardScree
 
   void _navigateToAppointments() {
     // Navigation vers la liste des rendez-vous
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Navigation vers les rendez-vous...'),
-        backgroundColor: AppTheme.primaryBlue,
-      ),
-    );
+    context.push(AppRouter.appointments);
   }
 
   void _navigateToAvailability() {
-    Navigator.of(context).pushNamed(AppRouter.availabilityManagement);
+    context.push(AppRouter.availabilityManagement);
   }
 
   void _navigateToAddAppointment() {
     // Navigation vers l'ajout de rendez-vous
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Navigation vers l\'ajout de rendez-vous...'),
-        backgroundColor: AppTheme.primaryBlue,
-      ),
-    );
+    context.push(AppRouter.appointments);
   }
 
   void _showAppointmentDetails(Map<String, dynamic> appointment) {
@@ -489,7 +486,7 @@ class _ProfessionalDashboardScreenState extends State<ProfessionalDashboardScree
   }
 
   void _showProfile() {
-    Navigator.of(context).pushNamed(AppRouter.professionalProfile);
+    context.push(AppRouter.professionalProfile);
   }
 
   void _handleLogout() async {
@@ -497,10 +494,7 @@ class _ProfessionalDashboardScreenState extends State<ProfessionalDashboardScree
     await authProvider.logout();
     
     if (mounted) {
-      Navigator.of(context).pushNamedAndRemoveUntil(
-        '/professional-login',
-        (Route<dynamic> route) => false,
-      );
+      context.pushReplacement(AppRouter.professionalLogin);
     }
   }
 }

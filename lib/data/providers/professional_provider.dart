@@ -205,11 +205,14 @@ class ProfessionalProvider extends ChangeNotifier {
 
     try {
       final apiService = ApiService();
+      print('DEBUG PROVIDER - Creating availability with data: $data');
       final response = await apiService.post(ApiConfig.availabilityCreate, data: data);
+      print('DEBUG PROVIDER - Availability created: ${response.data}');
       
       _availabilities.add(response.data);
       notifyListeners();
     } catch (e) {
+      print('DEBUG PROVIDER - Error creating availability: $e');
       _setError(e.toString());
     } finally {
       _setLoading(false);
@@ -223,7 +226,10 @@ class ProfessionalProvider extends ChangeNotifier {
 
     try {
       final apiService = ApiService();
-      final response = await apiService.patch('${ApiConfig.availabilityList}disponibilites/$id/', data: data);
+      final url = '${ApiConfig.professionals}disponibilites/$id/';
+      print('DEBUG PROVIDER - Updating availability at $url with data: $data');
+      final response = await apiService.patch(url, data: data);
+      print('DEBUG PROVIDER - Availability updated: ${response.data}');
       
       final index = _availabilities.indexWhere((a) => a['id'] == id);
       if (index != -1) {
@@ -232,6 +238,7 @@ class ProfessionalProvider extends ChangeNotifier {
       
       notifyListeners();
     } catch (e) {
+      print('DEBUG PROVIDER - Error updating availability: $e');
       _setError(e.toString());
     } finally {
       _setLoading(false);

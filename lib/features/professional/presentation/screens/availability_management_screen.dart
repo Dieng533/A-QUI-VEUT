@@ -48,8 +48,14 @@ class _AvailabilityManagementScreenState extends State<AvailabilityManagementScr
     final authProvider = context.read<AuthProvider>();
     final professionalProvider = context.read<ProfessionalProvider>();
     
+    print('DEBUG AVAILABILITY - Loading data...');
+    print('DEBUG AVAILABILITY - User data: ${authProvider.user}');
+    
     if (authProvider.user != null) {
-      await professionalProvider.getProfessional(authProvider.user!['id']);
+      final professionalId = authProvider.user?['professional_id'] ?? authProvider.user!['id'];
+      print('DEBUG AVAILABILITY - Professional ID: $professionalId');
+      
+      await professionalProvider.getProfessional(professionalId);
       
       if (professionalProvider.professional != null) {
         await professionalProvider.getAvailabilities(professionalProvider.professional!['id']);
@@ -145,7 +151,11 @@ class _AvailabilityManagementScreenState extends State<AvailabilityManagementScr
       final professionalId = professionalProvider.professional!['id'];
       
       for (var day in _days) {
-        if (!_isAvailable[day]!) continue;
+        // Si le jour n'est pas disponible, on peut soit le désactiver soit l'ignorer
+        if (!_isAvailable[day]!) {
+          // Optionnel : désactiver la disponibilité existante
+          continue;
+        }
         
         final availability = _availabilities[day];
         if (availability?['morning_start'] == null || availability?['morning_end'] == null) {
@@ -166,7 +176,21 @@ class _AvailabilityManagementScreenState extends State<AvailabilityManagementScr
           'est_disponible': _isAvailable[day],
         };
 
-        await professionalProvider.createAvailability(data);
+        print('DEBUG AVAILABILITY - Saving availability for $day: $data');
+
+        // Vérifier si une disponibilité existe déjà pour ce jour
+        final existingAvailabilities = professionalProvider.availabilities
+            .where((a) => a['jour'] == day).toList();
+        
+        if (existingAvailabilities.isNotEmpty) {
+          // Mettre à jour la disponibilité existante
+          await professionalProvider.updateAvailability(existingAvailabilities.first['id'], data);
+          print('DEBUG AVAILABILITY - Updated availability for $day');
+        } else {
+          // Créer une nouvelle disponibilité
+          await professionalProvider.createAvailability(data);
+          print('DEBUG AVAILABILITY - Created availability for $day');
+        }
       }
 
       if (mounted) {
@@ -179,6 +203,7 @@ class _AvailabilityManagementScreenState extends State<AvailabilityManagementScr
         );
       }
     } catch (e) {
+      print('DEBUG AVAILABILITY - Error saving availabilities: $e');
       if (mounted) {
         Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(

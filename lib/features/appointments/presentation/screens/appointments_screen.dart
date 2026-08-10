@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/router/app_router.dart';
+import '../../../../data/providers/professional_provider.dart';
 import '../../../../shared/widgets/doctor_card.dart';
 import '../../../../shared/widgets/custom_button.dart';
 import '../../../../shared/widgets/search_bar.dart';
-import '../../../../shared/data/mock_data.dart';
+import '../../../../shared/widgets/loading_widget.dart';
 
 class AppointmentsScreen extends StatefulWidget {
   const AppointmentsScreen({super.key});
@@ -30,12 +32,39 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
 
   int _selectedCategory = 0;
 
-  final List<Map<String, dynamic>> _doctors = MockData.doctors;
+  List<Map<String, dynamic>> _professionals = [];
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _loadProfessionals();
+  }
+
+  Future<void> _loadProfessionals() async {
+    setState(() {
+      _isLoading = true;
+    });
+    
+    try {
+      final professionalProvider = context.read<ProfessionalProvider>();
+      await professionalProvider.getProfessionals();
+      
+      if (mounted) {
+        setState(() {
+          _professionals = professionalProvider.professionals;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      print('DEBUG APPOINTMENTS - Error loading professionals: $e');
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
 
   @override
@@ -45,22 +74,27 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
     super.dispose();
   }
 
-  List<Map<String, dynamic>> get _filteredDoctors {
-    if (_selectedCategory == 0) return _doctors;
+  List<Map<String, dynamic>> get _filteredProfessionals {
+    if (_selectedCategory == 0) return _professionals;
     
     final category = _categories[_selectedCategory].toLowerCase();
-    return _doctors.where((doctor) {
+    return _professionals.where((professional) {
+      final specialite = professional['specialite']?.toString().toLowerCase() ?? '';
+      
       switch (category) {
         case 'médecins':
-          return doctor['specialty'].toString().toLowerCase().contains('médecin') ||
-                 doctor['specialty'].toString().toLowerCase().contains('pédiatre') ||
-                 doctor['specialty'].toString().toLowerCase().contains('cardiologue') ||
-                 doctor['specialty'].toString().toLowerCase().contains('gynécologue') ||
-                 doctor['specialty'].toString().toLowerCase().contains('dermatologue');
+          return specialite.contains('medecin') ||
+                 specialite.contains('pediatre') ||
+                 specialite.contains('cardiologue') ||
+                 specialite.contains('gynecologue') ||
+                 specialite.contains('dermatologue') ||
+                 specialite.contains('ophtalmologue') ||
+                 specialite.contains('radiologue') ||
+                 specialite.contains('biologiste');
         case 'sages-femmes':
-          return doctor['specialty'].toString().toLowerCase().contains('sage-femme');
+          return specialite.contains('sage_femme');
         case 'infirmiers':
-          return doctor['specialty'].toString().toLowerCase().contains('infirmier');
+          return specialite.contains('infirmier');
         default:
           return true;
       }
@@ -134,33 +168,56 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
 
           const SizedBox(height: 20),
 
-          // Doctors List
+          // Professionals List
           Expanded(
-            child: FadeInUp(
-              duration: const Duration(milliseconds: 800),
-              delay: const Duration(milliseconds: 400),
-              child: ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                itemCount: _filteredDoctors.length,
-                itemBuilder: (context, index) {
-                  final doctor = _filteredDoctors[index];
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: DoctorCard(
-                      doctor: doctor,
-                      onTap: () => _showBookingDialog(doctor),
-                    ),
-                  );
-                },
-              ),
-            ),
+            child: _isLoading
+                ? const Center(child: LoadingWidget())
+                : _professionals.isEmpty
+                    ? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.people_outline,
+                              size: 64,
+                              color: AppTheme.mediumGray,
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              'Aucun professionnel disponible',
+                              style: TextStyle(
+                                color: AppTheme.darkGray,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : FadeInUp(
+                        duration: const Duration(milliseconds: 800),
+                        delay: const Duration(milliseconds: 400),
+                        child: ListView.builder(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          itemCount: _filteredProfessionals.length,
+                          itemBuilder: (context, index) {
+                            final professional = _filteredProfessionals[index];
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 16),
+                              child: DoctorCard(
+                                doctor: professional,
+                                onTap: () => _showBookingDialog(professional),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
           ),
         ],
       ),
     );
   }
 
-  void _showBookingDialog(Map<String, dynamic> doctor) {
+  void _showBookingDialog(Map<String, dynamic> professional) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -178,31 +235,30 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              doctor['name'],
+              '${professional['nom']} ${professional['prenom']}',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w600,
               ),
             ),
             const SizedBox(height: 4),
             Text(
-              doctor['specialty'],
+              professional['specialite'] ?? '',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppTheme.darkGray,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              professional['ville'] ?? '',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: AppTheme.darkGray,
               ),
             ),
             const SizedBox(height: 16),
             Text(
-              'Tarif: ${doctor['price']}',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: AppTheme.primaryBlue,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              doctor['availability'] == true ? 'Disponible' : 'Indisponible',
+              'Statut: ${professional['statut'] == 'actif' ? 'Actif' : 'Inactif'}',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppTheme.secondaryGreen,
+                color: professional['statut'] == 'actif' ? AppTheme.secondaryGreen : AppTheme.softRed,
                 fontWeight: FontWeight.w500,
               ),
             ),

@@ -32,8 +32,14 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
     final authProvider = context.read<AuthProvider>();
     final professionalProvider = context.read<ProfessionalProvider>();
     
+    print('DEBUG DOCTOR PROFILE - Loading data...');
+    print('DEBUG DOCTOR PROFILE - User data: ${authProvider.user}');
+    
     if (authProvider.user != null) {
-      await professionalProvider.getProfessional(authProvider.user!['id']);
+      final professionalId = authProvider.user?['professional_id'] ?? authProvider.user!['id'];
+      print('DEBUG DOCTOR PROFILE - Professional ID: $professionalId');
+      await professionalProvider.getProfessional(professionalId);
+      print('DEBUG DOCTOR PROFILE - Professional loaded: ${professionalProvider.professional}');
     }
   }
 

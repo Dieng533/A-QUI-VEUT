@@ -82,8 +82,15 @@ class _ProfessionalProfileScreenState extends State<ProfessionalProfileScreen> {
     final authProvider = context.read<AuthProvider>();
     final professionalProvider = context.read<ProfessionalProvider>();
     
+    print('DEBUG PROFILE - Loading data...');
+    print('DEBUG PROFILE - User data: ${authProvider.user}');
+    
     if (authProvider.user != null) {
-      await professionalProvider.getProfessional(authProvider.user!['id']);
+      final professionalId = authProvider.user?['professional_id'] ?? authProvider.user!['id'];
+      print('DEBUG PROFILE - Professional ID: $professionalId');
+      
+      await professionalProvider.getProfessional(professionalId);
+      print('DEBUG PROFILE - Professional loaded: ${professionalProvider.professional}');
       
       if (mounted && professionalProvider.professional != null) {
         final prof = professionalProvider.professional!;

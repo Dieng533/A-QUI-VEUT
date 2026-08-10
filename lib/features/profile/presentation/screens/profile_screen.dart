@@ -35,9 +35,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final authProvider = context.read<AuthProvider>();
     final user = authProvider.user;
     
+    print('DEBUG PROFILE - Loading user data: $user');
+    
     if (user != null) {
-      _nameController.text = user['name'] ?? '';
-      _phoneController.text = user['phone'] ?? '';
+      // Essayer différents champs possibles pour le nom
+      final name = user['name'] ?? user['first_name'] ?? user['username'] ?? '';
+      final firstName = user['first_name'] ?? '';
+      final lastName = user['last_name'] ?? '';
+      
+      // Construire le nom complet
+      String fullName = name;
+      if (fullName.isEmpty && (firstName.isNotEmpty || lastName.isNotEmpty)) {
+        fullName = '$firstName $lastName'.trim();
+      }
+      
+      print('DEBUG PROFILE - Full name: $fullName');
+      
+      _nameController.text = fullName;
+      _phoneController.text = user['phone'] ?? user['telephone'] ?? '';
       _emailController.text = user['email'] ?? '';
     }
   }
@@ -202,7 +217,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           const SizedBox(height: 16),
                           Text(
-                            authProvider.user?['name'] ?? 'Utilisateur',
+                            _nameController.text.isNotEmpty ? _nameController.text : 'Utilisateur',
                             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                               color: AppTheme.white,
                               fontWeight: FontWeight.bold,
