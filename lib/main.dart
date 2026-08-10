@@ -6,6 +6,9 @@ import 'core/theme/app_theme.dart';
 import 'core/router/app_router.dart';
 import 'data/providers/auth_provider.dart';
 import 'data/providers/app_provider.dart';
+import 'data/providers/professional_provider.dart';
+import 'data/providers/appointment_provider.dart';
+import 'data/providers/location_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,11 +16,18 @@ void main() async {
   // Initialisation des préférences partagées
   final prefs = await SharedPreferences.getInstance();
   
+  // Initialiser l'état d'authentification
+  final authProvider = AuthProvider();
+  await authProvider.checkAuthStatus();
+  
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider.value(value: authProvider),
         ChangeNotifierProvider(create: (_) => AppProvider()),
+        ChangeNotifierProvider(create: (_) => ProfessionalProvider()),
+        ChangeNotifierProvider(create: (_) => AppointmentProvider()),
+        ChangeNotifierProvider(create: (_) => LocationProvider()),
       ],
       child: AQuiVeutApp(prefs: prefs),
     ),

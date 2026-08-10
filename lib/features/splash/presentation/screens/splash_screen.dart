@@ -99,9 +99,10 @@ class _SplashScreenState extends State<SplashScreen>
           ),
         ),
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
               // Logo animé
               AnimatedBuilder(
                 animation: _scaleAnimation,
@@ -184,6 +185,7 @@ class _SplashScreenState extends State<SplashScreen>
               ),
             ],
           ),
+        ),
         ),
       ),
     );

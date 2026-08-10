@@ -5,24 +5,41 @@ import '../../features/splash/presentation/screens/splash_screen.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/register_screen.dart';
+import '../../features/auth/presentation/screens/professional_login_screen.dart';
+import '../../features/auth/presentation/screens/auth_selection_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/appointments/presentation/screens/appointments_screen.dart';
 import '../../features/chatbot/presentation/screens/chatbot_screen.dart';
 import '../../features/map/presentation/screens/map_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/notifications/presentation/screens/notifications_screen.dart';
+import '../../features/emergency/presentation/screens/emergency_screen.dart';
+import '../../features/psychosocial/presentation/screens/psychosocial_screen.dart';
+import '../../features/professional/presentation/screens/professional_dashboard_screen.dart';
+import '../../features/professional/presentation/screens/doctor_profile_screen.dart';
+import '../../features/professional/presentation/screens/availability_management_screen.dart';
+import '../../features/professional/presentation/screens/professional_profile_screen.dart';
 
 class AppRouter {
   static const String splash = '/splash';
   static const String onboarding = '/onboarding';
+  static const String authSelection = '/auth-selection';
   static const String login = '/login';
   static const String register = '/register';
+  static const String adminLogin = '/admin-login';
+  static const String professionalLogin = '/professional-login';
   static const String home = '/home';
   static const String appointments = '/appointments';
   static const String chatbot = '/chatbot';
   static const String map = '/map';
   static const String profile = '/profile';
   static const String notifications = '/notifications';
+  static const String emergency = '/emergency';
+  static const String psychosocial = '/psychosocial';
+  static const String professionalDashboard = '/professional-dashboard';
+  static const String doctorProfile = '/doctor-profile';
+  static const String availabilityManagement = '/availability-management';
+  static const String professionalProfile = '/professional-profile';
 
   static final GoRouter router = GoRouter(
     initialLocation: splash,
@@ -43,6 +60,13 @@ class AppRouter {
         builder: (context, state) => const OnboardingScreen(),
       ),
       
+      // Auth Selection
+      GoRoute(
+        path: authSelection,
+        name: 'authSelection',
+        builder: (context, state) => const AuthSelectionScreen(),
+      ),
+      
       // Auth Routes
       GoRoute(
         path: login,
@@ -54,6 +78,46 @@ class AppRouter {
         path: register,
         name: 'register',
         builder: (context, state) => const RegisterScreen(),
+      ),
+      
+      GoRoute(
+        path: adminLogin,
+        name: 'adminLogin',
+        builder: (context, state) => const LoginScreen(),
+      ),
+      
+      GoRoute(
+        path: professionalLogin,
+        name: 'professionalLogin',
+        builder: (context, state) => const ProfessionalLoginScreen(),
+      ),
+      
+      // Professional Dashboard
+      GoRoute(
+        path: professionalDashboard,
+        name: 'professionalDashboard',
+        builder: (context, state) => const ProfessionalDashboardScreen(),
+      ),
+      
+      // Doctor Profile
+      GoRoute(
+        path: doctorProfile,
+        name: 'doctorProfile',
+        builder: (context, state) => const DoctorProfileScreen(),
+      ),
+      
+      // Availability Management
+      GoRoute(
+        path: availabilityManagement,
+        name: 'availabilityManagement',
+        builder: (context, state) => const AvailabilityManagementScreen(),
+      ),
+      
+      // Professional Profile
+      GoRoute(
+        path: professionalProfile,
+        name: 'professionalProfile',
+        builder: (context, state) => const ProfessionalProfileScreen(),
       ),
       
       // Main App Routes (Bottom Navigation)
@@ -92,6 +156,20 @@ class AppRouter {
         path: notifications,
         name: 'notifications',
         builder: (context, state) => const NotificationsScreen(),
+      ),
+      
+      // Emergency
+      GoRoute(
+        path: emergency,
+        name: 'emergency',
+        builder: (context, state) => const EmergencyScreen(),
+      ),
+      
+      // Psychosocial Support
+      GoRoute(
+        path: psychosocial,
+        name: 'psychosocial',
+        builder: (context, state) => const PsychosocialScreen(),
       ),
     ],
     

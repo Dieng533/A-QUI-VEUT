@@ -41,6 +41,8 @@ dependencies:
   intl: ^0.18.1
   uuid: ^4.2.1
   connectivity_plus: ^7.1.1
+  url_launcher: ^6.2.4
+  image_picker: ^1.0.4
 
   # Animations
   animate_do: ^3.1.2

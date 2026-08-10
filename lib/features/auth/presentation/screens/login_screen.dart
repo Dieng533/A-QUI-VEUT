@@ -20,7 +20,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController(text: 'test@example.com');
-  final _passwordController = TextEditingController(text: 'password123');
+  final _passwordController = TextEditingController(text: 'password');
   bool _obscurePassword = true;
 
   @override
@@ -41,7 +41,21 @@ class _LoginScreenState extends State<LoginScreen> {
       
       if (authProvider.isAuthenticated) {
         if (mounted) {
-          context.pushReplacement(AppRouter.home);
+          // Redirection selon le rôle de l'utilisateur
+          final userRole = authProvider.user?['role'];
+          print('DEBUG LOGIN - User role: $userRole');
+          print('DEBUG LOGIN - User data: ${authProvider.user}');
+          
+          if (userRole == 'professional') {
+            print('DEBUG LOGIN - Redirecting to professional dashboard');
+            context.pushReplacement(AppRouter.professionalDashboard);
+          } else if (userRole == 'admin') {
+            print('DEBUG LOGIN - Redirecting to home (admin)');
+            context.pushReplacement(AppRouter.home); // Admin vers home pour l'instant
+          } else {
+            print('DEBUG LOGIN - Redirecting to home (user)');
+            context.pushReplacement(AppRouter.home); // User normal vers home
+          }
         }
       } else {
         _showErrorMessage(authProvider.errorMessage ?? 'Erreur de connexion');
@@ -255,7 +269,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       // Lien vers inscription
                       FadeInUp(
                         duration: const Duration(milliseconds: 800),
-                        delay: const Duration(milliseconds: 1200),
+                        delay: const Duration(milliseconds: 1400),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
